@@ -15,11 +15,11 @@ email:zhou1354061659@hotmail.com
     这段代码可以帮助您读取excel插入到数据库并对比，但你需要知道
     1. 因为我使用OpenXml读取excel，所以它只能读xlsx，如果您需要读取xls，您可以使用NOPI
     2. 因为我使用OpenXml读取excel，所以你仍然需要有 Open XML SDK 2.0 for Microsoft Office ,链接 http://www.microsoft.com/en-us/download/details.aspx?id=5124
-	3. 你需要特殊的表，它需要有 ID，RowNum，InsertTime 和 其他你需要的列
-	4. 有关列
-	   ID：它是表的标志，防止重复的
-	   RowNum：它是在这批excel中的行号
-	   InsertTime：这是这批excel的时间 
+    3. 你需要特殊的表，它需要有 ID，RowNum，InsertTime 和 其他你需要的列
+    4. 有关列
+       ID：它是表的标志，防止重复的
+       RowNum：它是在这批excel中的行号
+       InsertTime：这是这批excel的时间 
 	
 这是我第一次发布代码，如果您有任何疑问，请与我联系
 email:zhou1354061659@hotmail.com
