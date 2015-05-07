@@ -1,0 +1,10 @@
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer(BigData)_Demo\bin\Web_ExcelToSqlServer(BigData)_Demo.dll
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer(BigData)_Demo\bin\Web_ExcelToSqlServer(BigData)_Demo.pdb
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer(BigData)_Demo\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer(BigData)_Demo\obj\Debug\Web_ExcelToSqlServer(BigData)_Demo.dll
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer(BigData)_Demo\obj\Debug\Web_ExcelToSqlServer(BigData)_Demo.pdb
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer_Demo\bin\Web_ExcelToSqlServer(BigData)_Demo.dll
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer_Demo\bin\Web_ExcelToSqlServer(BigData)_Demo.pdb
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer_Demo\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer_Demo\obj\Debug\Web_ExcelToSqlServer(BigData)_Demo.dll
+C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer_Demo\obj\Debug\Web_ExcelToSqlServer(BigData)_Demo.pdb
