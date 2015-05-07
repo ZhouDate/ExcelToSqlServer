@@ -1,5 +1,0 @@
-C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer\bin\Debug\Web_ExcelToSqlServer.dll
-C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer\bin\Debug\Web_ExcelToSqlServer.pdb
-C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer\obj\Debug\Web_ExcelToSqlServer.dll
-C:\Users\Administrator\Desktop\Web_ExcelToSqlServer\Web_ExcelToSqlServer\obj\Debug\Web_ExcelToSqlServer.pdb
