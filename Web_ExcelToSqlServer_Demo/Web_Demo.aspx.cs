@@ -70,12 +70,15 @@ namespace Web_ExcelToSqlServer_Demo
                     // set this table name equal table name in database
                     dt.TableName = "TableDemo";
 
+                    // compare in database
+                    comparehelper = new CompareHelper(ConnectionString);
+                    comparehelper.SetDBData();
+
                     // write to database
                     sqlcopyhelper = new SqlBulkCopyHelper(ConnectionString);
                     sqlcopyhelper.WriteData(dt);
 
-                    // compare in database
-                    comparehelper = new CompareHelper(ConnectionString);
+                    // compare data
                     DataSet ds = comparehelper.CompareDBData();
 
                     if (ds != null && ds.Tables.Count != 0)

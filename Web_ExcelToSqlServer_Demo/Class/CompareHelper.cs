@@ -20,6 +20,7 @@ namespace Web_ExcelToSqlServer_Demo
         private SqlConnection conn;
         private SqlDataAdapter adapter;
         private DataSet ds;
+        private SqlCommand comm;
 
         #endregion
 
@@ -39,6 +40,35 @@ namespace Web_ExcelToSqlServer_Demo
         #endregion
 
         #region Public method
+
+        #region SetDBData
+        /// <summary>
+        /// SetDBData
+        /// </summary>
+        /// <returns></returns>
+        public void SetDBData()
+        {
+            using (conn = new SqlConnection(this.connectionstring))
+            {
+                // open database
+                conn.Open();
+
+                // sql text
+                StringBuilder sb = new StringBuilder();
+
+                // because "SELECT MAX(ROWNUM)", So it's possible that [ROWNUM] in database greater than [ROWNUM] in excel
+                sb.Append(" UPDATE TABLEDEMO                                ");
+                sb.Append(" SET ROWNUM = 0                                  ");
+
+                comm = conn.CreateCommand();
+                comm.CommandText = sb.ToString();
+                comm.CommandType = CommandType.Text;
+
+                // exceute sql
+                comm.ExecuteNonQuery();
+            }
+        }
+        #endregion
 
         #region CompareDBData
         /// <summary>
