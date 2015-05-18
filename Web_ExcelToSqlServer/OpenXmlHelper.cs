@@ -125,7 +125,7 @@ namespace Web_ExcelToSqlServer_Demo
         /// <param name="worksheetpart">WorksheetPart</param>
         /// <param name="time">batch time flag</param>
         /// <returns></returns>
-        private DataTable ReadExcelToDataTable(WorksheetPart worksheetpart, DateTime time)
+        private DataTable ReadExcelToDataTable(WorksheetPart worksheetpart)
         {
             DataTable dt = null;
 
@@ -163,12 +163,12 @@ namespace Web_ExcelToSqlServer_Demo
                             collist.Add(col);
                         }
 
-                        //add rownum
-                        //it is row number in excel 
-                        dt.Columns.Add("ROWNUM");
-                        //add inserttime
-                        //it is batch flag of insert into table
-                        dt.Columns.Add("INSERTTIME", typeof(DateTime));
+                        ////add rownum
+                        ////it is row number in excel 
+                        //dt.Columns.Add("ROWNUM");
+                        ////add inserttime
+                        ////it is batch flag of insert into table
+                        //dt.Columns.Add("INSERTTIME", typeof(DateTime));
 
                         //set PrimaryKey,without "ROWNUM" and "INSERTTIME"
                         dt.PrimaryKey = collist.ToArray();
@@ -183,10 +183,10 @@ namespace Web_ExcelToSqlServer_Demo
                     //column index
                     int ColumnIndex = 0;
 
-                    //set rownum
-                    dr["ROWNUM"] = RowIndex;
-                    //set inserttime
-                    dr["INSERTTIME"] = time;
+                    ////set rownum
+                    //dr["ROWNUM"] = RowIndex;
+                    ////set inserttime
+                    //dr["INSERTTIME"] = time;
 
                     //loop cell
                     foreach (var cell in row.Descendants<Cell>())
@@ -262,16 +262,13 @@ namespace Web_ExcelToSqlServer_Demo
                 throw new Exception("SheetName is null or empty!");
             }
 
-            // flag time
-            DateTime time = DateTime.Now;
-
             // get worksheet of name is SheetName
             IEnumerable<Sheet> s = doucumentopen.WorkbookPart.Workbook.Descendants<Sheet>().Where(x => x.Name == SheetName);
 
             // select WorksheetPart
             WorksheetPart worksheetpart = doucumentopen.WorkbookPart.GetPartById(s.First().Id) as WorksheetPart;
 
-            return ReadExcelToDataTable(worksheetpart, time);
+            return ReadExcelToDataTable(worksheetpart);
         }
         #endregion
 
@@ -289,16 +286,13 @@ namespace Web_ExcelToSqlServer_Demo
                 throw new Exception("SheetIndex < 0!");
             }
 
-            // flag time
-            DateTime time = DateTime.Now;
-
             // get number SheetIndex worksheet 
             Sheet sheet = doucumentopen.WorkbookPart.Workbook.Descendants<Sheet>().ElementAt(SheetIndex);
 
             // select WorksheetPart
             WorksheetPart worksheetpart = doucumentopen.WorkbookPart.GetPartById(sheet.Id) as WorksheetPart;
 
-            return ReadExcelToDataTable(worksheetpart, time);
+            return ReadExcelToDataTable(worksheetpart);
         }
         #endregion
 

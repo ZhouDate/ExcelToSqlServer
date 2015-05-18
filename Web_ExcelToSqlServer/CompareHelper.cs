@@ -5,6 +5,7 @@
 //Other：
 //--------------------------------------------
 //No     Editor     UpdateTime       Note
+//1      zhou       20150518         Simplify the process 
 
 using System.Data;
 using System.Data.SqlClient;
@@ -18,9 +19,10 @@ namespace Web_ExcelToSqlServer_Demo
 
         private string connectionstring;
         private SqlConnection conn;
-        private SqlDataAdapter adapter;
-        private DataSet ds;
         private SqlCommand comm;
+        private SqlDataAdapter adapter;
+        private SqlTransaction tran;
+        private DataSet ds;
 
         #endregion
 
@@ -41,32 +43,50 @@ namespace Web_ExcelToSqlServer_Demo
 
         #region Public method
 
-        #region SetDBData
+        #region BeginTransaction
         /// <summary>
-        /// SetDBData
+        /// BeginTransaction
         /// </summary>
         /// <returns></returns>
-        public void SetDBData()
+        public SqlTransaction BeginTransaction()
         {
-            using (conn = new SqlConnection(this.connectionstring))
-            {
-                // open database
-                conn.Open();
+            conn = new SqlConnection(this.connectionstring);
+            conn.Open();
+            comm = conn.CreateCommand();
+            tran = conn.BeginTransaction();
+            comm.Transaction = tran;
 
-                // sql text
-                StringBuilder sb = new StringBuilder();
+            return tran;
+        }
+        #endregion
 
-                // because "SELECT MAX(ROWNUM)", So it's possible that [ROWNUM] in database greater than [ROWNUM] in excel
-                sb.Append(" UPDATE TABLEDEMO                                ");
-                sb.Append(" SET ROWNUM = 0                                  ");
+        #region CommintTransaction
+        /// <summary>
+        /// CommintTransaction
+        /// </summary>
+        /// <returns></returns>
+        public void CommintTransaction()
+        {
+            if (tran != null)
+                tran.Commit();
 
-                comm = conn.CreateCommand();
-                comm.CommandText = sb.ToString();
-                comm.CommandType = CommandType.Text;
+            if (conn != null && conn.State == ConnectionState.Open)
+                conn.Close();
+        }
+        #endregion
 
-                // exceute sql
-                comm.ExecuteNonQuery();
-            }
+        #region RollbackTransaction
+        /// <summary>
+        /// RollbackTransaction
+        /// </summary>
+        /// <returns></returns>
+        public void RollbackTransaction()
+        {
+            if (tran != null)
+                tran.Rollback();
+
+            if (conn != null && conn.State == ConnectionState.Open)
+                conn.Close();
         }
         #endregion
 
@@ -77,57 +97,48 @@ namespace Web_ExcelToSqlServer_Demo
         /// <returns></returns>
         public DataSet CompareDBData()
         {
-            using (conn = new SqlConnection(this.connectionstring))
-            {
-                // open database
-                conn.Open();
 
-                // sql text
-                StringBuilder sb = new StringBuilder();
+            // sql text
+            StringBuilder sb = new StringBuilder();
 
-                // create temp table "temp1"
-                sb.Append(" CREATE TABLE #TEMP1                             ");
-                sb.Append(" (                                               ");
-                sb.Append("     [ROWNUM] [INT] NULL,                        ");
-                sb.Append("  	[INSERTTIME] [DATETIME] NULL,               ");
-                sb.Append(" 	[COLUMN1] [VARCHAR](50) NULL,               ");
-                sb.Append(" 	[COLUMN2] [VARCHAR](50) NULL,               ");
-                sb.Append(" 	[COLUMN3] [VARCHAR](50) NULL,               ");
-                sb.Append(" 	[COLUMN4] [VARCHAR](50) NULL,               ");
-                sb.Append(" 	[COLUMN5] [VARCHAR](50) NULL                ");
-                sb.Append(" );                                              ");
+            // select repeat data
+            sb.Append(" SELECT T1.ID                   ");
+            sb.Append(" ,T1.[COLUMN1]                  ");
+            sb.Append(" ,T1.[COLUMN2]                  ");
+            sb.Append(" ,T1.[COLUMN3]                  ");
+            sb.Append(" ,T1.[COLUMN4]                  ");
+            sb.Append(" ,T1.[COLUMN5]                  ");
+            sb.Append(" FROM (                         ");
+            sb.Append("  SELECT MAX([ID]) AS ID        ");
+            sb.Append("  ,[COLUMN1]                    ");
+            sb.Append("  ,[COLUMN2]                    ");
+            sb.Append("  ,[COLUMN3]                    ");
+            sb.Append("  ,[COLUMN4]                    ");
+            sb.Append("  ,[COLUMN5]                    ");
+            sb.Append(" FROM [TABLEDEMO]               ");
+            sb.Append(" GROUP BY [COLUMN1],[COLUMN2],  ");
+            sb.Append(" [COLUMN3],[COLUMN4],[COLUMN5]  ");
+            sb.Append(" HAVING COUNT(*) > 1            ");
+            sb.Append(" ) T1                           ");
+            sb.Append(" ORDER BY T1.ID DESC;           ");
 
-                // select repeat data and insert into "temp1"
-                sb.Append(" INSERT INTO #TEMP1                              ");
-                sb.Append(" (ROWNUM,INSERTTIME,COLUMN1,COLUMN2,             ");
-                sb.Append(" COLUMN3,COLUMN4,COLUMN5)                        ");
-                sb.Append(" SELECT MAX(ROWNUM),MAX(INSERTTIME),             ");
-                sb.Append(" COLUMN1,COLUMN2,COLUMN3,COLUMN4,COLUMN5         ");
-                sb.Append(" FROM TABLEDEMO                                  ");
-                sb.Append(" GROUP BY COLUMN1,COLUMN2,COLUMN3,COLUMN4,COLUMN5");
-                sb.Append(" HAVING COUNT(*) > 1 ;                           ");
+            // select MAX ID
+            sb.Append(" SELECT ISNULL(MAX(ID),0) AS ID FROM [TABLEDEMO];");
 
-                // delete all data in batch of this
-                sb.Append(" DELETE                                          ");
-                sb.Append(" FROM TABLEDEMO                                  ");
-                sb.Append(" WHERE INSERTTIME IN (SELECT                     ");
-                sb.Append(" INSERTTIME FROM #TEMP1);                        ");
-                                                                            
-                // return all repeat data                                   
-                sb.Append(" SELECT ROWNUM,INSERTTIME,COLUMN1,               ");
-                sb.Append(" COLUMN2,COLUMN3,COLUMN4,COLUMN5                 ");
-                sb.Append(" FROM #TEMP1 ORDER BY ROWNUM DESC;               ");
+            // set Command
+            comm.CommandType = CommandType.Text;
+            comm.CommandText = sb.ToString();
 
-                // exceute sql
-                adapter = new SqlDataAdapter(sb.ToString(), conn);
+            // exceute sql
+            adapter = new SqlDataAdapter(comm);
 
-                ds = new DataSet();
+            ds = new DataSet();
 
-                // fill 
-                adapter.Fill(ds);
+            // fill 
+            adapter.Fill(ds);
 
-                return ds;
-            }
+            return ds;
+
         }
         #endregion
 

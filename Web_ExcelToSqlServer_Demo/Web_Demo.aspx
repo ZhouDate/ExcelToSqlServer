@@ -11,7 +11,7 @@
     <div>
         <asp:FileUpload ID="FileUpload1" runat="server" />
         <br />
-        <asp:Button ID="Button1" runat="server" Text="上传" onclick="Button1_Click" />
+        <asp:Button ID="Button1" runat="server" Text="submit" onclick="Button1_Click" />
     </div>
     </form>
 </body>
